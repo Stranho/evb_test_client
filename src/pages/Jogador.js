@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import {
     Typography,
+    Paper,
+    TablePagination,
+    TableContainer
 } from '@material-ui/core';
 
 import CancelIcon from '@material-ui/icons/Cancel';
@@ -15,28 +18,30 @@ class Jogador extends Component {
         this.state = {
             baseHost: 'https://evb-test.herokuapp.com',
             jogador: {},
-            transferencias: {received: [], made: []},
+            transferencias: { received: [], made: [] },
+            rowsPerPage: 5,
+            page: 0,
             columns: [{
                 Header: 'Nome',
                 accessor: 'nome',
-              },
-              {
+            },
+            {
                 Header: 'Valor',
                 accessor: 'valor',
-              },
-              {
+            },
+            {
                 Header: 'Data',
-                Cell: ({row}) => new Date(row.original.data_operacao).toLocaleDateString('pt-BR'),
-              },
-              {
+                Cell: ({ row }) => new Date(row.original.data_operacao).toLocaleDateString('pt-BR'),
+            },
+            {
                 Header: 'Situação',
-                Cell: ({row}) => row.original.operacao_cancelada ? 'Cancelada' : 'Ativa' ,
-              },
-              {
+                Cell: ({ row }) => row.original.operacao_cancelada ? 'Cancelada' : 'Ativa',
+            },
+            {
                 Header: 'Operações',
-                Cell: ({row}) => this.renderCellButton(row),
+                Cell: ({ row }) => this.renderCellButton(row),
                 width: 64,
-              }
+            }
             ]
 
         }
@@ -47,7 +52,7 @@ class Jogador extends Component {
     }
 
     cancelClickEvent(id) {
-        fetch(`${this.state.baseHost}/Transfers/${id}`, {method: 'delete'}).then(() => this.getOne(this.state.jogador.id));
+        fetch(`${this.state.baseHost}/Transfers/${id}`, { method: 'delete' }).then(() => this.getOne(this.state.jogador.id));
     }
 
     componentDidMount() {
@@ -66,7 +71,7 @@ class Jogador extends Component {
     }
 
     render() {
-        const { jogador, transferencias, columns } = this.state;
+        const { jogador, transferencias, columns, page, rowsPerPage } = this.state;
 
         return (
             <div className="App">
@@ -80,8 +85,23 @@ class Jogador extends Component {
                         <br />
                         {/* Exibe a lista de jogadores */}
                         <Typography variant="h5">Transferências recebidas</Typography>
-                        <Table columns={columns} data={transferencias.received} />
-                        
+                        <Paper>
+                            <TableContainer>
+                                <Table columns={columns} data={transferencias.received} page={page} rowsPerPage={rowsPerPage} />
+                                <TablePagination
+                                    rowsPerPageOptions={[5, 10, 25]}
+                                    component="div"
+                                    count={transferencias.received.length}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    onChangePage={(event, newPage) => { this.setState({ page: newPage }) }}
+                                    onChangeRowsPerPage={(event) => {
+                                        this.setState({ rowsPerPage: parseInt(event.target.value, 10) });
+                                        this.setState({ page: 0 });
+                                    }}
+                                />
+                            </TableContainer>
+                        </Paper>
                     </div>
                 ) : (
                     <div>
@@ -96,8 +116,24 @@ class Jogador extends Component {
                         <br />
                         {/* Exibe a lista de jogadores */}
                         <Typography variant="h5">Transferências realizadas</Typography>
-                        <Table columns={columns} data={transferencias.made} />
-                        
+                        <Paper>
+                            <TableContainer>
+                                <Table columns={columns} data={transferencias.made} page={page} rowsPerPage={rowsPerPage} />
+                                <TablePagination
+                                    rowsPerPageOptions={[5, 10, 25]}
+                                    component="div"
+                                    count={transferencias.made.length}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    onChangePage={(event, newPage) => { this.setState({ page: newPage }) }}
+                                    onChangeRowsPerPage={(event) => {
+                                        this.setState({ rowsPerPage: parseInt(event.target.value, 10) });
+                                        this.setState({ page: 0 });
+                                    }}
+                                />
+                            </TableContainer>
+                        </Paper>
+
                     </div>
                 ) : (
                     <div>

@@ -23,12 +23,6 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
 import Table from '../components/Table';
-import { TableFooter } from '@material-ui/core';
-import { TableRow } from '@material-ui/core';
-import TableHead from '@material-ui/core/TableHead';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import RTable from '@material-ui/core/Table';
 
 class Jogadores extends Component {
     // Initialize the state
