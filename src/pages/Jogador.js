@@ -13,6 +13,7 @@ class Jogador extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            baseHost: 'https://evb-test.herokuapp.com',
             jogador: {},
             transferencias: {received: [], made: []},
             columns: [{
@@ -46,7 +47,7 @@ class Jogador extends Component {
     }
 
     cancelClickEvent(id) {
-        fetch(`/Transfers/${id}`, {method: 'delete'}).then(() => this.getOne(this.state.jogador.id));
+        fetch(`${this.state.baseHost}/Transfers/${id}`, {method: 'delete'}).then(() => this.getOne(this.state.jogador.id));
     }
 
     componentDidMount() {
@@ -56,10 +57,10 @@ class Jogador extends Component {
 
     // Retorna a lista do express
     getOne = (id) => {
-        fetch(`/Jogadores/${id}`)
+        fetch(`${this.state.baseHost}/Jogadores/${id}`)
             .then(res => res.json())
             .then(jogador => this.setState({ jogador }));
-        fetch(`/Transfers/${id}`)
+        fetch(`${this.state.baseHost}/Transfers/${id}`)
             .then(res => res.json())
             .then(transferencias => this.setState({ transferencias }));
     }

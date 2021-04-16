@@ -42,6 +42,7 @@ class Jogadores extends Component {
         this.dialogTransferClick = this.dialogTransferClick.bind(this);
         this.newPlayerConfirmClick = this.newPlayerConfirmClick.bind(this);
         this.state = {
+            baseHost: 'https://evb-test.herokuapp.com',
             transferDialogOpen: false,
             newPlayerDialogOpen: false,
             newPlayerName: '',
@@ -78,7 +79,7 @@ class Jogadores extends Component {
 
     // Retorna a lista do express
     getList() {
-        fetch('/Jogadores')
+        fetch(`${this.state.baseHost}/Jogadores`)
             .then(res => res.json())
             .then(list => this.setState({ list }))
     }
@@ -110,7 +111,7 @@ class Jogadores extends Component {
                 idDestino: this.state.idDestino,
                 valor: this.state.valorDestino
             };
-            fetch(`/Transfers`, {
+            fetch(`${this.state.baseHost}/Transfers`, {
                 method: 'post', headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
@@ -126,7 +127,7 @@ class Jogadores extends Component {
             nome: this.state.newPlayerName,
             saldo: 10
         };
-        fetch(`/Jogadores`, {
+        fetch(`${this.state.baseHost}/Jogadores`, {
             method: 'post', headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
